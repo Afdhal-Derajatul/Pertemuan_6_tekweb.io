@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kalkulator Sederhana</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      display: grid;
+      min-height: 100vh;
+      margin: 0;
+      padding: 24px;
+      place-items: center;
+      background: #f1f5f9;
+      color: #172033;
+      font-family: system-ui, sans-serif;
+    }
+
+    main {
+      width: min(100%, 420px);
+      padding: 28px;
+      border-radius: 16px;
+      background: #fff;
+      box-shadow: 0 12px 32px rgb(15 23 42 / 10%);
+    }
+
+    h1 {
+      margin: 0 0 24px;
+      font-size: 1.6rem;
+      text-align: center;
+    }
+
+    .fields {
+      display: grid;
+      gap: 16px;
+    }
+
+    label {
+      display: grid;
+      gap: 6px;
+      font-weight: 600;
+    }
+
+    input {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      font: inherit;
+    }
+
+    .operations {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 10px;
+      border: 0;
+      border-radius: 8px;
+      background: #2563eb;
+      color: #fff;
+      cursor: pointer;
+      font: inherit;
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    button:focus-visible,
+    input:focus-visible {
+      outline: 3px solid #93c5fd;
+      outline-offset: 2px;
+    }
+
+    #hasil {
+      min-height: 56px;
+      margin: 20px 0 0;
+      padding: 14px;
+      border-radius: 8px;
+      background: #eff6ff;
+      overflow-wrap: anywhere;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Kalkulator Sederhana</h1>
+    <div class="fields">
+      <label for="angka-pertama">Angka pertama</label>
+      <input id="angka-pertama" type="number" step="any" inputmode="decimal">
+
+      <label for="angka-kedua">Angka kedua</label>
+      <input id="angka-kedua" type="number" step="any" inputmode="decimal">
+    </div>
+
+    <div class="operations" aria-label="Operasi">
+      <button type="button" data-operasi="tambah" aria-label="Tambah">+</button>
+      <button type="button" data-operasi="kurang" aria-label="Kurang">-</button>
+      <button type="button" data-operasi="kali" aria-label="Kali">*</button>
+      <button type="button" data-operasi="bagi" aria-label="Bagi">/</button>
+    </div>
+
+    <p id="hasil" aria-live="polite">Hasil akan ditampilkan di sini.</p>
+  </main>
+
+  <script>
+    const angkaPertama = document.getElementById("angka-pertama");
+    const angkaKedua = document.getElementById("angka-kedua");
+    const hasil = document.getElementById("hasil");
+
+    document.querySelectorAll("[data-operasi]").forEach((tombol) => {
+      tombol.addEventListener("click", () => {
+        const nilaiPertama = angkaPertama.valueAsNumber;
+        const nilaiKedua = angkaKedua.valueAsNumber;
+
+        if (!Number.isFinite(nilaiPertama) || !Number.isFinite(nilaiKedua)) {
+          hasil.textContent = "Masukkan kedua angka terlebih dahulu.";
+          return;
+        }
+
+        let nilaiHasil;
+        switch (tombol.dataset.operasi) {
+          case "tambah":
+            nilaiHasil = nilaiPertama + nilaiKedua;
+            break;
+          case "kurang":
+            nilaiHasil = nilaiPertama - nilaiKedua;
+            break;
+          case "kali":
+            nilaiHasil = nilaiPertama * nilaiKedua;
+            break;
+          case "bagi":
+            if (nilaiKedua === 0) {
+              hasil.textContent = "Angka tidak dapat dibagi dengan nol.";
+              return;
+            }
+            nilaiHasil = nilaiPertama / nilaiKedua;
+            break;
+        }
+
+        hasil.textContent = `Hasil: ${nilaiHasil}`;
+      });
+    });
+  </script>
+</body>
+</html>
